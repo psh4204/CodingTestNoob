@@ -11,6 +11,7 @@ Original file is located at
 * 가장 좋은 것을 먼저 고른다.
 """
 
+
 n = 1260
 count = 0
 
