@@ -330,5 +330,151 @@ while end != 1 :
 print(world)
 print(result)
 
+"""* 코딩테스트 팁
+  * 실무에서는 값에따라 예외처리를 해야함
+  * 코테에서는 값이 주어지므로 예외처리를 안해도 됨
+"""
+
 # 다시 한번 풀어보자..
 # 이것저것 해봤으니까 다시 해보면 무언가 되지 않을까
+
+# n  m 입력
+n, m = map(int, input().split())
+# x, y, z 입력
+x, y, z = map(int, input().split())
+
+# 간 곳을 적어놓는 지도
+record = [[0]*n for _ in range(m)]
+
+# 지도 입력
+world = [list(map(int,input().split()))[:n] for i in range(m)]
+
+# 북, 동, 남, 서 의 방향의 왼쪽 좌표 (0,1,2,3)
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+
+# 왼쪽 turn 함수
+def turnLeft():
+  global z
+  z += 1
+  if(z >= 3):
+    z = 0
+
+# main
+# 바다 or 가본곳은 1 로 표시하는것으로
+result = 1
+turn = 0
+
+while True :
+  turnLeft()
+  nx = x + dx[z]
+  ny = y + dy[z]
+  # 갈수 있는 곳
+  if world[nx][ny] == 0 :
+    record[x][y] = 1
+    x = nx
+    y = ny
+    result += 1
+    turn = 0
+
+  # 갈수없는곳(바다,가본곳 = 1)
+  elif world[nx][ny] == 1 or record[nx][ny] == 1:
+    turn += 1
+
+  # 4회회전(어디에도 갈곳이 없을 때)
+  if turn == 4 :
+    
+    if nz > 3 :
+      
+    # 뒤에 갈고 있으면 뒤로 이동
+    if world[nx]][ny] == 0:
+      world[x][y] == 1
+      x = x+dx[nz]
+      y = y+dy[nz]
+      result += 1
+      turn = 0
+
+    # 뒤에 갈곳 없으면 break
+    elif world[x+dx[nz]][y+dy[nz]] == 1:
+      world[x][y] == 1
+      break
+  print(result)
+
+print("=result=")
+for i in range(m):
+  print(world[i])
+print(result)
+
+# 다시다시 ( 성공.. )
+
+# n, m
+n, m = map(int,input().split())
+
+# x,y,z
+x,y,z = map(int, input().split())
+
+# 가본곳 표시 할 맵
+already_places = [[0]* n for _ in range(m)]
+
+# 지도 만들기
+world = [list(map(int,input().split()))[:n] for _ in range(m)]
+
+# 방향 (북,동,남,서) 
+# 그래프에서는  (x,y) 의 위치를 표현해서 그대로 쓰였지만
+# 리스트.행열같은 표에서는 [x줄, y줄]을 표현해야해서 흡사 그래프에서 (y,x) 좌표와 같음
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
+
+# 왼쪽으로 보기 함수
+def seeLeft():
+  global z
+  z -= 1
+  if z < 0 :
+    z = 3
+
+result = 1 # 방문한 칸의 수
+turn_c = 0 # 회전 횟수
+
+# main
+while True:
+  seeLeft()
+  nx = x + dx[z]
+  ny = y + dy[z]
+  print(nx,ny, ":", result, turn_c)
+  # 가보지 않았고, 육지인 곳 = 0
+  if already_places[nx][ny] == 0 and world[nx][ny] == 0:
+    already_places[x][y] = 1
+    x = nx
+    y = ny
+    result += 1
+    turn_c = 0
+    continue
+  # 가본곳 이나 바다인곳 = 1
+  elif already_places[nx][ny] == 1 or world[nx][ny] == 1:
+    turn_c += 1
+  
+  # 4방향 가본곳이라던지, 바다라면?
+  if turn_c == 4:
+    # 어우.. 좌표찾기 너무 힘들다
+    # 뒤쪽방향 = 왔던 좌표 - 현재바라보는좌표(회전4회해서 방향이 돌아옴)
+    lx = x - dx[z]
+    ly = y - dy[z]
+    # 뒤에 가본적 있는가?
+    if already_places[lx][ly] == 0 :
+      already_places[x][y] = 1
+      x = lx
+      y = ly
+      break
+    # 뒤에바다거나 가본적있은가?
+    else :
+      already_places[x][y] = 1
+      break
+
+print("---WORLD---")
+for i in range(m):
+  print(world[i])
+print("---ROAD---")
+for i in range(m):
+  print(already_places[i])
+print("**RESULT**")
+print(result)
